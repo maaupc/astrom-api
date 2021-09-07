@@ -11,6 +11,7 @@ class Server {
         this.app = express()
 
         //Path de rutas para realizar peticiones
+        this.empleadosPath = "/api/empleados"
         //Completar con "paths" a medida que creamos rutas
 
         //Realizo la conexion a la Base Datos
@@ -42,6 +43,7 @@ class Server {
 
     routes(){
         //Completar con las rutas a medida que las creamos
+        this.app.use(this.empleadosPath, require('../routes/empleados'))
     }
 
     //Levanto el servidor en el puerto asignado a la variable global PORT
