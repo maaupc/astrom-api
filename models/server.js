@@ -12,6 +12,7 @@ class Server {
 
         //Path de rutas para realizar peticiones
         this.empleadosPath = "/api/empleados"
+        this.authPath = "/api/auth"
         //Completar con "paths" a medida que creamos rutas
 
         //Realizo la conexion a la Base Datos
@@ -44,6 +45,7 @@ class Server {
     routes(){
         //Completar con las rutas a medida que las creamos
         this.app.use(this.empleadosPath, require('../routes/empleados'))
+        this.app.use(this.authPath, require('../routes/auth'))
     }
 
     //Levanto el servidor en el puerto asignado a la variable global PORT
