@@ -12,8 +12,9 @@ class Server {
 
         //Path de rutas para realizar peticiones
         //Completar con "paths" a medida que creamos rutas
-
+        this.port = process.env.PORT;
         //Realizo la conexion a la Base Datos
+        this.puestosPath="/api/puestos"
         this.conectarDB()
 
         //Ejecuto los Middlewares
@@ -42,6 +43,7 @@ class Server {
 
     routes(){
         //Completar con las rutas a medida que las creamos
+        this.app.use(this.puestosPath, require("../routes/puestos"))
     }
 
     //Levanto el servidor en el puerto asignado a la variable global PORT
