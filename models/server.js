@@ -14,8 +14,9 @@ class Server {
         this.empleadosPath = "/api/empleados"
         this.authPath = "/api/auth"
         //Completar con "paths" a medida que creamos rutas
-
+        this.port = process.env.PORT;
         //Realizo la conexion a la Base Datos
+        this.puestosPath="/api/puestos"
         this.conectarDB()
 
         //Ejecuto los Middlewares
@@ -46,6 +47,7 @@ class Server {
         //Completar con las rutas a medida que las creamos
         this.app.use(this.empleadosPath, require('../routes/empleados'))
         this.app.use(this.authPath, require('../routes/auth'))
+        this.app.use(this.puestosPath, require("../routes/puestos"))
     }
 
     //Levanto el servidor en el puerto asignado a la variable global PORT
