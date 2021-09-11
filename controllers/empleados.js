@@ -31,8 +31,8 @@ const obtenerEmpleado = async (req= request, res= response)=>{
 }
 
 const crearEmpleado = async (req= request, res= response)=>{
-    const {dni , nombre, apellido, email, password, rol} = req.body
-    const empleado = new Empleado({dni , nombre, apellido, email, password, rol})
+    const {dni , nombre, apellido, email, password, puesto, rol} = req.body
+    const empleado = new Empleado({dni , nombre, apellido, email, password, puesto, rol})
 
     //Metodo para encriptar contraseña con BcryptJS
     const salt = bcrypt.genSaltSync(10)

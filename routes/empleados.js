@@ -2,7 +2,7 @@ const {Router} = require('express')
 
 //Importacion de validaciones
 const { check } = require('express-validator')
-const { existeID, existeDni } = require('../helpers/db-validator')
+const { existeID, existeDni, existePuesto } = require('../helpers/db-validator')
 
 const {validarCampos} = require('../middlewares/validar-campos')
 const {esAdmin} = require('../middlewares/validar-rol')
@@ -36,6 +36,8 @@ router.post('/', [
     check("password", "Debe tener 5 caracteres minimo").isLength({min:6}),
     check("email", "No es un correo valido").isEmail(),
     check("dni").custom(existeDni),
+    check("puesto", "No se ingreso un ID valido").isMongoId(),
+    check("puesto").custom(existePuesto),
     check("rol", "No se ingreso un rol valido").isIn(["USER_ROLE","ADMIN_ROLE"]),
     validarCampos
     ], crearEmpleado)

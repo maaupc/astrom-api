@@ -25,6 +25,11 @@ const EmpleadoSchema= new Schema({
         type: String,
         required: [true, "La contraseña es obligatoria"],
     },
+    puesto:{
+        type: Schema.Types.ObjectId,
+        ref: "Puesto",
+        require: true
+    },
     estado:{
         type: Boolean,
         default:true,
