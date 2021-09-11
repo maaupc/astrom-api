@@ -11,12 +11,14 @@ class Server {
         this.app = express()
 
         //Path de rutas para realizar peticiones
+        //Completar con "paths" a medida que creamos rutas
         this.empleadosPath = "/api/empleados"
         this.authPath = "/api/auth"
-        //Completar con "paths" a medida que creamos rutas
-        this.port = process.env.PORT;
-        //Realizo la conexion a la Base Datos
         this.puestosPath="/api/puestos"
+        this.licenciasPath="/api/licencias"
+        this.port = process.env.PORT;
+        
+        //Realizo la conexion a la Base Datos
         this.conectarDB()
 
         //Ejecuto los Middlewares
@@ -48,6 +50,7 @@ class Server {
         this.app.use(this.empleadosPath, require('../routes/empleados'))
         this.app.use(this.authPath, require('../routes/auth'))
         this.app.use(this.puestosPath, require("../routes/puestos"))
+        this.app.use(this.licenciasPath,  require("../routes/licencias"))
     }
 
     //Levanto el servidor en el puerto asignado a la variable global PORT
