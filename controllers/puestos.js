@@ -4,12 +4,14 @@ const Puesto=require("../models/puesto")
 //asi me creo cada funcion oara mla peticion
 const puestosGet=async(req=request,res=response)=>{
    //accediendo a buscar informacion y me traiga los puestod activos 
-   let{limite=8,desde=0}=req.query;
-   limite=Number(limite)
-   desde=Number(desde) 
-     const puestos= await  Puesto.find({estado
-      :true}).limit(limite).skip(desde)
+      let{ limite=8, desde=0 }=req.query;
+
+      limite=Number(limite)
+      desde=Number(desde) 
+
+      const puestos= await  Puesto.find({estado:true}).limit(limite).skip(desde)
       const total= await Puesto.countDocuments({estado:true})
+
       res.jsonp({
             Total:total,
             puestos
@@ -26,24 +28,22 @@ const puestosGet=async(req=request,res=response)=>{
 //          puestos
 //        }) 
 // }
-//Crear categoria
+
+//Crea puestos
 const  puestosPost = async (req, res = response) => {
       
-      const{nombre,horarios,salario}=req.body
-      try { 
+      const{nombre, horarios, salario }=req.body
+      try {
 
-       const puestosDB = await Puesto.findOne({ nombre });
+       const puestosDB = await Puesto.findOne({ nombre: nombre.toUpperCase() });
        if (puestosDB) {
          return res.status(400).json({
            msg: `El puesto ${puestosDB.nombre} ya existe`,
          });
        }
-     //  Generar la data
-      const data = {
-        nombre,
-        horarios,
-        salario
-      };
+
+     //Generar la data
+      const data = {nombre: nombre.toUpperCase() , horarios, salario};
       const puesto = new Puesto(data);
     
       //Guardar DB
@@ -60,11 +60,17 @@ const  puestosPost = async (req, res = response) => {
 const puestosPut=async(req=request,res=response)=>{
       //para capturar los parametros que pasamos x la url
       const id = req.params.id;
+
       //lo que no quiero q modifique el usuario pero el resto si lo puede hacer
-      const {_id,...resto}=req.body
+      const {_id, nombre, ...resto}=req.body
+
+      if(nombre){
+            resto.nombre = nombre.toUpperCase()
+      }
+
       try {
       //busca el archivo por id y modifica su estado
-      const puesto=await Puesto.findByIdAndUpdate(id,resto,  {new:true})
+      const puesto=await Puesto.findByIdAndUpdate(id, resto,  {new:true})
        res.json({
              msg:"Se actualizaron correctamente los datos ",
              puesto
