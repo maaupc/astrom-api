@@ -1,29 +1,57 @@
 const {request, response}=require('express');
-const { findByIdAndUpdate } = require('../models/licencia');
+const Empleado = require('../models/empleado')
 const Licencia=require('../models/licencia')
-const {validationResult} = require('express-validator')
 
-const licenciasGet = (req=request,  res=response)=> {
+const licenciasGet = async (req=request,  res=response)=> {
+    let { limite=10, desde=0 } = req.query
 
-    
-         res.json({
-         msg: 'GET licencias'
-            });
-      
+    limite = Number(limite)
+    desde = Number(desde)
 
+    const licencias = await Licencia.find({estado:true}).limit(limite).skip(desde)
+    const total = await Licencia.countDocuments({estado:true})
+
+    res.json({
+        Total: total,
+        licencias,
+    })
+}
+
+const obtenerLicencia = async(req=request,  res=response) =>{
+    const {id} = req.params
+    let { limite=10, desde=0 } = req.query
+
+    limite = Number(limite)
+    desde = Number(desde)
+
+    const licencias = await Licencia.find({empleado: id ,estado:true}).limit(limite).skip(desde)
+    const total = await Licencia.countDocuments({empleado: id ,estado:true})
+
+    res.json({
+        Total: total,
+        licencias,
+    })
 }
 
 const licenciasPost = async (req=request,  res=response)=> {
+    const { fecha, motivo, dni } = req.body;
+    let empleado = {}
+    console.log(dni)
 
-    const errores = validationResult(req)
-    if(!errores.isEmpty()){
-        return res.json({errors: errores.array()});
+    if(dni){
+        empleado = await Empleado.findOne({dni})
+
+        if(!empleado){
+            return res.status(400).json({
+                msg: "No se ingreso un documento valido"
+            })
+        }
+    }else{
+         empleado = req.empleado
     }
 
 
-
-    const { fecha, motivo } = req.body;
-    const licencia = new Licencia({fecha, motivo})
+    const licencia = new Licencia({fecha, motivo, empleado})
     await licencia.save()
 
     res.json({
@@ -38,15 +66,24 @@ const licenciasPost = async (req=request,  res=response)=> {
 
 const licenciasPut = async (req=request,  res=response)=> {
 const id = req.params.id
-const estado = req.estado
-const licencia = await Licencia.findByIdAndUpdate(id, {estado: false})
+const data= req.body
+const licencia = await Licencia.findByIdAndUpdate(id, data)
     
     res.json({
     msg: 'PUT licencias',
-    id, estado
+    licencia
        });
- 
+}
 
+
+const inactivarLicencia = async (req=request,  res=response)=> {
+const {id} = req.params
+const licencia = await Licencia.findByIdAndUpdate(id, {estado: false})
+    
+    res.json({
+    msg: 'Licencia eliminada',
+    licencia
+       });
 }
 
 module.exports={
@@ -54,4 +91,6 @@ module.exports={
     licenciasGet,
     licenciasPost,
     licenciasPut,
+    obtenerLicencia,
+    inactivarLicencia
 }

@@ -1,5 +1,6 @@
 const Empleado = require('../models/empleado')
 const Puesto = require('../models/puesto')
+const Licencia = require('../models/licencia')
 
 const existeDni = async (dni) =>{
     const dniExiste = await Empleado.findOne({dni})
@@ -17,6 +18,15 @@ const existeID = async (id) =>{
         throw new Error(`El ID ${id} no se encuentra registrado`)
     }
 }
+
+const existeLicencia = async (id) =>{
+    const licenciaExiste = await Licencia.findById(id)
+
+    if(!licenciaExiste){
+        throw new Error(`El ID ${id} no se encuentra registrado`)
+    }
+}
+
 
 const existePuesto = async (id) => {
     const existePuesto = await Puesto.findById(id);
@@ -41,6 +51,7 @@ const existePuesto = async (id) => {
 module.exports = {
     existeDni,
     existeID,
+    existeLicencia,
     existePuesto,
     validarSalario
 }

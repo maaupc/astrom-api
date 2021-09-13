@@ -3,7 +3,7 @@ const{Router}=require("express")
 //Importo para hacer validaciones
 const {check}=require("express-validator")
 
-const {validarCampos}=require("../middlewares/validarcampos")
+const {validarCampos}=require("../middlewares/validar-campos")
 const {existePuesto}=require("../helpers/db-validator")
 
 const {esAdmin} = require('../middlewares/validar-rol')

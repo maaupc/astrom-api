@@ -9,16 +9,23 @@ fecha:{
     unique: true
 
 },
-
 motivo:{
     type: String,
     require:[true, "Ingrese un motivo"],
     unique: false
 },
-
+empleado:{
+    type: Schema.Types.ObjectId,
+    ref: "Empleado",
+    require: true
+},
+activa:{
+    type: Boolean,
+    default: false
+},
 estado:{
     type: Boolean,
-    default:false
+    default:true
 }
 
 

@@ -1,18 +1,25 @@
-const {schema,model}=require("mongoose")
+const {Schema,model}=require("mongoose")
+//Schema escrito con minisculas
 
 const DocumentacionSchema = new Schema ({
     antiguedad:{
         type:Number,
         require:[true, "seleccione el inicio de la fecha de la antiguedad"],
-        unique:true
     },
     recibo_sueldo:{
-        type:Date,
-        require:[true,"ingrese su recibo"],
-        unique:true
+        type:String,
+    },
+    licencia:{
+        type: Array
+    },
+    empleado:{
+        type: Schema.Types.ObjectId,
+        ref: "Empleado",
+    },
+    estado:{
+        type: Boolean,
+        default: true
     }
-
-
 })
 
-exports.exports=model("Documentacion",DocumentacionSchema)
+module.exports = model("Documentacion", DocumentacionSchema)
