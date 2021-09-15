@@ -16,17 +16,6 @@ const puestosGet=async(req=request,res=response)=>{
       })
 }
 
-// const puestosPost= async(req=request,res=response)=>{
-//    //estamos mandando info x req 
-//       const {nombre,horarios,salario}=req.body
-//       const puestos=new Puesto({nombre,horarios,salario})
-//       await puestos.save()
-//       res.json({
-//          msg:"Puesto creado" ,
-//          puestos
-//        }) 
-// }
-//Crear categoria
 const  puestosPost = async (req, res = response) => {
       
       const{nombre,horarios,salario}=req.body
