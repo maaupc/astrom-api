@@ -9,6 +9,8 @@ const licenciasGet = async (req=request,  res=response)=> {
     desde = Number(desde)
 
     const licencias = await Licencia.find({estado:true}).limit(limite).skip(desde)
+    .populate("empleado", "nombre apellido dni")
+
     const total = await Licencia.countDocuments({estado:true})
 
     res.json({
@@ -24,11 +26,9 @@ const obtenerLicencia = async(req=request,  res=response) =>{
     limite = Number(limite)
     desde = Number(desde)
 
-    const licencias = await Licencia.find({empleado: id ,estado:true}).limit(limite).skip(desde)
-    const total = await Licencia.countDocuments({empleado: id ,estado:true})
+    const licencias = await Licencia.findById(id).populate("empleado", "nombre apellido dni")
 
     res.json({
-        Total: total,
         licencias,
     })
 }

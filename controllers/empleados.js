@@ -9,9 +9,18 @@ const obtenerEmpleados = async (req= request, res= response)=>{
     limite = Number(limite)
     desde = Number(desde)
 
-    const empleados = await Empleado.find({estado:true}).limit(limite).skip(desde)
+    // const empleados = await Empleado.find({estado:true}).limit(limite).skip(desde)
+    // .populate("puesto", "nombre")
 
-    const total = await Empleado.countDocuments({estado:true})
+    const [total, empleados] = await Promise.all([
+        Empleado.countDocuments({ estado: true }),
+        Empleado.find({ estado: true })
+          .skip(desde)
+          .limit(limite)
+          .populate("puesto","nombre"),
+      ]);
+
+    // const total = await Empleado.countDocuments({estado:true})
 
     res.json({
         Total: total,
@@ -23,7 +32,8 @@ const obtenerEmpleados = async (req= request, res= response)=>{
 const obtenerEmpleado = async (req= request, res= response)=>{
     const {id} = req.params
 
-    const empleado = Empleado.findById(id)
+    const empleado = await Empleado.findById(id)
+    // .populate("puesto", "nombre")
 
     res.json({
         empleado
