@@ -3,10 +3,17 @@ const Empleado = require('../models/empleado')
 const Licencia=require('../models/licencia')
 
 const licenciasGet = async (req=request,  res=response)=> {
-    let { limite=10, desde=0 } = req.query
+    let {limite=10, desde=0} = req.query
 
     limite = Number(limite)
     desde = Number(desde)
+
+    if (isNaN(limite)) {
+    limite = 5;
+    }
+    if (isNaN(desde)) {
+    desde = 0;
+    }
 
     const licencias = await Licencia.find({estado:true}).limit(limite).skip(desde)
     .populate("empleado", "nombre apellido dni")
@@ -34,22 +41,7 @@ const obtenerLicencia = async(req=request,  res=response) =>{
 }
 
 const licenciasPost = async (req=request,  res=response)=> {
-    const { fecha, motivo, dni } = req.body;
-    let empleado = {}
-    console.log(dni)
-
-    if(dni){
-        empleado = await Empleado.findOne({dni})
-
-        if(!empleado){
-            return res.status(400).json({
-                msg: "No se ingreso un documento valido"
-            })
-        }
-    }else{
-         empleado = req.empleado
-    }
-
+    const { fecha, motivo, empleado } = req.body;
 
     const licencia = new Licencia({fecha, motivo, empleado})
     await licencia.save()

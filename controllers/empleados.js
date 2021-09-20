@@ -9,6 +9,13 @@ const obtenerEmpleados = async (req= request, res= response)=>{
     limite = Number(limite)
     desde = Number(desde)
 
+    if (isNaN(limite)) {
+    limite = 5;
+    }
+    if (isNaN(desde)) {
+    desde = 0;
+    }
+
     // const empleados = await Empleado.find({estado:true}).limit(limite).skip(desde)
     // .populate("puesto", "nombre")
 

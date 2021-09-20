@@ -23,11 +23,7 @@ const{
 const router = Router()
 
 //Obtener todas las licencias
-router.get('/', [
-  validarJWT,
-  esAdmin,
-  ],
-  licenciasGet);
+router.get('/', licenciasGet);
 
 //Obtener las licencias de un empleado - ID Empleado
 router.get('/:id', [
