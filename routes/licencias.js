@@ -1,9 +1,9 @@
 
-const {Router} = require('express')
+const {Router, request} = require('express')
 const {check} = require('express-validator')
 
 
-const {existeLicencia, existeID} = require('../helpers/db-validator')
+const {existeLicencia, existeID, licenciaActiva, fechaFin} = require('../helpers/db-validator')
 
 
 const { validarCampos } = require('../middlewares/validar-campos')
@@ -15,7 +15,7 @@ const{
   licenciasPost,
   licenciasPut,
   obtenerLicencia,
-  inactivarLicencia
+  eliminarLicencia
   
 } = require('../controllers/licencias')
 
@@ -35,7 +35,9 @@ router.get('/:id', [
 //Crear nueva licencias
 router.post('/',[
     validarJWT,
-    check("fecha", "La fecha debe ser obligatoria").not().isEmpty(),
+    check("inicio", "La fecha de inicio debe ser obligatoria").not().isEmpty(),
+    check("fin", "La fecha de finalizacion debe ser obligatoria").not().isEmpty(),
+    check("fin").custom((fin, {req})=>fechaFin(fin, req)),
     validarCampos
     ],
     licenciasPost);
@@ -46,6 +48,7 @@ router.put('/:id', [
   esAdmin,
   check("id", "No se ingreso un ID valido").isMongoId(),
   check("id").custom(existeLicencia),
+  check("id").custom((id, {req})=>licenciaActiva(id, req)),
   validarCampos,
   ],
   licenciasPut);
@@ -57,7 +60,7 @@ router.delete('/:id', [
   check("id", "No se ingreso un ID valido").isMongoId(),
   check("id").custom(existeLicencia),
   ],
-  inactivarLicencia);
+  eliminarLicencia);
 
 
   module.exports=router;

@@ -41,9 +41,9 @@ const obtenerLicencia = async(req=request,  res=response) =>{
 }
 
 const licenciasPost = async (req=request,  res=response)=> {
-    const { fecha, motivo, empleado } = req.body;
+    const { inicio, fin, motivo, empleado } = req.body;
 
-    const licencia = new Licencia({fecha, motivo, empleado})
+    const licencia = new Licencia({inicio, fin, motivo, empleado})
     await licencia.save()
 
     res.json({
@@ -59,16 +59,16 @@ const licenciasPost = async (req=request,  res=response)=> {
 const licenciasPut = async (req=request,  res=response)=> {
 const id = req.params.id
 const data= req.body
-const licencia = await Licencia.findByIdAndUpdate(id, data)
+const licencia = await Licencia.findByIdAndUpdate(id, data, {new: true})
     
     res.json({
-    msg: 'PUT licencias',
+    msg: 'Licencia actualizada',
     licencia
        });
 }
 
 
-const inactivarLicencia = async (req=request,  res=response)=> {
+const eliminarLicencia = async (req=request,  res=response)=> {
 const {id} = req.params
 const licencia = await Licencia.findByIdAndUpdate(id, {estado: false})
     
@@ -84,5 +84,5 @@ module.exports={
     licenciasPost,
     licenciasPut,
     obtenerLicencia,
-    inactivarLicencia
+    eliminarLicencia
 }

@@ -1,6 +1,7 @@
 const Empleado = require('../models/empleado')
 const Puesto = require('../models/puesto')
 const Licencia = require('../models/licencia')
+const moment = require('moment')
 
 const existeDni = async (dni) =>{
     const dniExiste = await Empleado.findOne({dni})
@@ -48,10 +49,42 @@ const existePuesto = async (id) => {
   
   }
 
+const licenciaActiva = async (id, req) => {
+    const licencia = await Licencia.findById(id)
+    const body = req.body
+    const empleadoID = licencia.empleado
+    const licenciasVigentes = await Licencia.countDocuments({activa:true, empleado: empleadoID })
+
+    console.log(body.activa)
+    console.log(licenciasVigentes)
+
+    if(licenciasVigentes>0){
+        if(body.activa === "true"){
+            throw new Error(`El empleado ya posee una licencia activa`)
+        }
+    }
+
+}
+
+const fechaFin = async (fin, req) =>{
+    const body = req.body
+    const fechaError = moment(fin).isSameOrBefore(body.inicio)
+
+    console.log(fechaError)
+
+
+    if(fechaError){
+        throw new Error(`La fecha de fin debe ser distinta o mayor a la de inicio: ${body.inicio}`)
+    }
+
+}
+
 module.exports = {
     existeDni,
     existeID,
     existeLicencia,
     existePuesto,
-    validarSalario
+    validarSalario,
+    licenciaActiva,
+    fechaFin
 }

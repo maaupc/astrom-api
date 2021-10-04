@@ -1,18 +1,20 @@
 const {Schema, model}=require('mongoose')
+const moment = require('moment')
 
 
 const LicenciaSchema = new Schema({
 
-fecha:{
+inicio:{
     type: Date,
     require: [true, "Seleccione una fecha de inicio de licencia"],
-    unique: true
-
+},
+fin:{
+    type: Date,
+    require: [true, "Seleccione una fecha de fin de licencia"],
 },
 motivo:{
     type: String,
     require:[true, "Ingrese un motivo"],
-    unique: false
 },
 empleado:{
     type: Schema.Types.ObjectId,
@@ -30,5 +32,12 @@ estado:{
 
 
 })
+//Para formatear la manera de mostrar la fecha
+LicenciaSchema.methods.toJSON=function(){
+    const {__v, inicio, fin, ...licencia}=this.toObject();
+    licencia.inicio= moment(inicio).format('YYYY-MM-DD')
+    licencia.fin= moment(fin).format('YYYY-MM-DD')
+    return licencia;
+};
 
 module.exports=model("Licencia", LicenciaSchema)

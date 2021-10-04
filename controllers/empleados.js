@@ -24,7 +24,7 @@ const obtenerEmpleados = async (req= request, res= response)=>{
         Empleado.find({ estado: true })
           .skip(desde)
           .limit(limite)
-          .populate("puesto","nombre"),
+          .populate("puesto","nombre salario horarios"),
       ]);
 
     // const total = await Empleado.countDocuments({estado:true})
@@ -49,7 +49,8 @@ const obtenerEmpleado = async (req= request, res= response)=>{
 
 const crearEmpleado = async (req= request, res= response)=>{
     const {dni , nombre, apellido, email, password, puesto, rol} = req.body
-    const empleado = new Empleado({dni , nombre, apellido, email, password, puesto, rol})
+    const empleado = new Empleado({dni , nombre, apellido, email, telefono, emergencia,
+        domicilio, localidad, provincia, nacimiento, password, puesto, rol})
 
     //Metodo para encriptar contraseña con BcryptJS
     const salt = bcrypt.genSaltSync(10)
