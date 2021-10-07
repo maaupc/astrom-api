@@ -4,13 +4,14 @@ const{Router}=require("express")
 const {check}=require("express-validator")
 
 const {validarCampos}=require("../middlewares/validar-campos")
-const {existePuesto}=require("../helpers/db-validator")
+const {existePuesto, existeID}=require("../helpers/db-validator")
 
 const {esAdmin} = require('../middlewares/validar-rol')
 const {validarJWT} = require('../middlewares/validar-token')
 
 //Importo los controladores
 const {puestosGet,
+      puestoGet,
       puestosPost,
       puestosPut,
       puestosDelete,}=require("../controllers/puestos")
@@ -20,6 +21,14 @@ const router=Router()
 
 //peticion para traer informacion
 router.get('/',puestosGet);
+
+//Peticion para traer puesto - ID
+router.get('/:id', [
+      check("id", "No se ingreso un ID valido").isMongoId(),
+      check("id").custom(existeID),
+      ],
+      puestoGet)
+
 //peticion  para mandar informacion 
 //validamos con check que el campo de nombre no este vacio antes de pasar a controller
 router.post( '/',

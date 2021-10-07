@@ -18,16 +18,17 @@ const puestosGet=async(req=request,res=response)=>{
       })
 }
 
-// const puestosPost= async(req=request,res=response)=>{
-//    //estamos mandando info x req 
-//       const {nombre,horarios,salario}=req.body
-//       const puestos=new Puesto({nombre,horarios,salario})
-//       await puestos.save()
-//       res.json({
-//          msg:"Puesto creado" ,
-//          puestos
-//        }) 
-// }
+const puestoGet = async(req=request,res=response)=>{
+      const {id} = req.params
+
+      const puesto = await Puesto.findById(id)
+
+      res.jsonp({
+            puesto
+      })
+}
+
+
 
 //Crea puestos
 const  puestosPost = async (req, res = response) => {
@@ -48,7 +49,10 @@ const  puestosPost = async (req, res = response) => {
     
       //Guardar DB
       await puesto.save();
-      res.status(201).json(puesto);
+      res.json({
+            msg: "Puesto creado",
+            puesto
+        })
 
       } catch (error) {
             console.log(error)
@@ -95,6 +99,7 @@ const puestosDelete=async(req=request,res=response)=>{
 
 module.exports={
       puestosGet,
+      puestoGet,
       puestosPost,
       puestosPut,
       puestosDelete,

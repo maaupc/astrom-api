@@ -1,9 +1,11 @@
 const {request, response}=require('express');
 const Empleado = require('../models/empleado')
 const Licencia=require('../models/licencia')
+const moment = require('moment')
 
 const licenciasGet = async (req=request,  res=response)=> {
-    let {limite=10, desde=0} = req.query
+    let {limite=10, desde=0, vencimiento} = req.query
+    let licencias, Total
 
     limite = Number(limite)
     desde = Number(desde)
@@ -15,10 +17,22 @@ const licenciasGet = async (req=request,  res=response)=> {
     desde = 0;
     }
 
-    const licencias = await Licencia.find({estado:true}).limit(limite).skip(desde)
-    .populate("empleado", "nombre apellido dni")
+    if(!vencimiento){
+         licencias = await Licencia.find({estado:true}).limit(limite).skip(desde)
+        .populate("empleado", "nombre apellido dni")
+        
+         total = await Licencia.countDocuments({estado:true})
+        
+    }else{
+        const licenciasCompletas = await Licencia.find({estado:true, activa:false}).populate("empleado", "nombre apellido dni")
 
-    const total = await Licencia.countDocuments({estado:true})
+         licencias = licenciasCompletas.filter((licencia)=>{
+            return moment(licencia.fin).isSameOrBefore(vencimiento)
+        })
+
+         total = licencias.length
+    }
+
 
     res.json({
         Total: total,
