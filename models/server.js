@@ -36,14 +36,15 @@ class Server {
     middlewares(){
         //Defino la pagina estatica de "public"
         this.app.use(express.static('public'))
+      
 
         //Uso de CORS
         this.app.use(cors())
 
         //Acceso al body de req para leer y parsear
-        this.app.use(express.json())
-        this.app.use(express.urlencoded({extended:true}))
-
+        this.app.use(express.json({limit: '200mb'}));
+        this.app.use(express.urlencoded({limit: '200mb', extended: true}));
+      
     }
 
     routes(){

@@ -7,7 +7,6 @@ const { existeID, existeDni, existePuesto } = require('../helpers/db-validator')
 const {validarCampos} = require('../middlewares/validar-campos')
 const {esAdmin} = require('../middlewares/validar-rol')
 const {validarJWT} = require('../middlewares/validar-token')
-
 //Importacion de controladores
 const {obtenerEmpleados,
     obtenerEmpleado,
@@ -46,9 +45,10 @@ router.post('/', [
 router.put('/:id', [
     check("id", "No se ingreso un ID valido").isMongoId(),
     check("id").custom(existeID),
-    check("dni").custom(existeDni),
+   //check("dni").custom(existeDni),
     validarCampos
     ], editarEmpleado)
+
 
 //Peticion para inactivar empleado - ADMIN
 router.delete('/:id', [
