@@ -64,7 +64,6 @@ const  puestosPost = async (req, res = response) => {
         })
 
       } catch (error) {
-            console.log(error)
             res.status(400).json("Ocurrio un error al guardar Puesto")
       }
       
@@ -89,7 +88,7 @@ const puestosPut=async(req=request,res=response)=>{
              puesto
        }) 
       } catch (error) {
-            console.log(error);
+            console.log(error)
             res.status(400).json("Ocurrio un error al actualizar el puesto");
       }
 }

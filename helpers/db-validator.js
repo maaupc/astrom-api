@@ -41,7 +41,6 @@ const existePuesto = async (id) => {
   
         const valor= salario;
   
-        console.log(`El salario es ${valor}`)
         if(isNaN(valor)){
            throw  new Error("No ingreso numeros")
         }
@@ -55,8 +54,6 @@ const licenciaActiva = async (id, req) => {
     const empleadoID = licencia.empleado
     const licenciasVigentes = await Licencia.countDocuments({activa:true, empleado: empleadoID })
 
-    console.log(body.activa)
-    console.log(licenciasVigentes)
 
     if(licenciasVigentes>0){
         if(body.activa){

@@ -64,7 +64,6 @@ const editarEmpleado = async (req= request, res= response)=>{
       const { id } = req.params
 
       const {_id, rol, password,...rest} = req.body
-     console.log(req.body)
       if(password){
           const salt = bcrypt.genSaltSync(10)
           rest.password = bcrypt.hashSync(password, salt)
@@ -75,12 +74,10 @@ const editarEmpleado = async (req= request, res= response)=>{
             //const buff = new Buffer.from(req.body.imagen , 'base64');
            // await fs.writeFileSync('./files/img_'+ new Date().getTime()+'.jpg', buff);
            
-            console.log(req.body.imagen)
             let data = req.body.imagen.replace(/^data:image\/\w+;base64,/, '');
             let nombreImagen= 'img_'+ new Date().getTime()+ ".png";
             fs.writeFile(process.env.DIR_IMAGE_FILES + nombreImagen, data, {encoding: 'base64'}, async function(err){
                 if(err){
-                   console.log(err)
                 }
                 else{
                       console.log("imagen guardada correctamente")
@@ -99,7 +96,7 @@ const editarEmpleado = async (req= request, res= response)=>{
               });
                 
           } catch (error) {
-               console.log(error) 
+            console.log(error)
                res.status(400).json({
                      msg:"Error al actualizar los datos del empleados"
                })
