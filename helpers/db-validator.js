@@ -59,7 +59,7 @@ const licenciaActiva = async (id, req) => {
     console.log(licenciasVigentes)
 
     if(licenciasVigentes>0){
-        if(body.activa === "true"){
+        if(body.activa){
             throw new Error(`El empleado ya posee una licencia activa`)
         }
     }
@@ -69,8 +69,6 @@ const licenciaActiva = async (id, req) => {
 const fechaFin = async (fin, req) =>{
     const body = req.body
     const fechaError = moment(fin).isSameOrBefore(body.inicio)
-
-    console.log(fechaError)
 
 
     if(fechaError){

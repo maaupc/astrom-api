@@ -45,7 +45,6 @@ router.post('/', [
 router.put('/:id', [
     check("id", "No se ingreso un ID valido").isMongoId(),
     check("id").custom(existeID),
-   //check("dni").custom(existeDni),
     validarCampos
     ], editarEmpleado)
 

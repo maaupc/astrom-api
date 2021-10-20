@@ -3,7 +3,7 @@ const Empleado = require('../models/empleado')
 const bcrypt = require('bcryptjs')
 const fs = require('fs');
 const obtenerEmpleados = async (req= request, res= response)=>{
-    let {limite=10, desde=0} = req.query
+    let {limite=5, desde=0} = req.query
 
     limite = Number(limite)
     desde = Number(desde)
@@ -15,18 +15,15 @@ const obtenerEmpleados = async (req= request, res= response)=>{
     desde = 0;
     }
 
-    // const empleados = await Empleado.find({estado:true}).limit(limite).skip(desde)
-    // .populate("puesto", "nombre")
 
     const [total, empleados] = await Promise.all([
         Empleado.countDocuments({ estado: true }),
         Empleado.find({ estado: true })
           .skip(desde)
-          .limit(limite)
+        //   .limit(limite)
           .populate("puesto","nombre salario horarios"),
       ]);
 
-    // const total = await Empleado.countDocuments({estado:true})
 
     res.json({
         Total: total,
@@ -39,7 +36,6 @@ const obtenerEmpleado = async (req= request, res= response)=>{
     const {id} = req.params
 
     const empleado = await Empleado.findById(id)
-    // .populate("puesto", "nombre")
      empleado.img=process.env.URL_BACK + "images/" + empleado.img ;
     res.json({
         empleado
@@ -73,41 +69,49 @@ const editarEmpleado = async (req= request, res= response)=>{
           const salt = bcrypt.genSaltSync(10)
           rest.password = bcrypt.hashSync(password, salt)
       }
-      try {
-        //const buff = new Buffer.from(req.body.imagen , 'base64');
-       // await fs.writeFileSync('./files/img_'+ new Date().getTime()+'.jpg', buff);
-       
-        console.log(req.body.imagen)
-        let data = req.body.imagen.replace(/^data:image\/\w+;base64,/, '');
-        let nombreImagen= 'img_'+ new Date().getTime()+ ".png";
-        fs.writeFile(process.env.DIR_IMAGE_FILES + nombreImagen, data, {encoding: 'base64'}, async function(err){
-            if(err){
-               console.log(err)
-            }
-            else{
-                  console.log("imagen guardada correctamente")
-                  const empleado = await Empleado.findById(id).exec();
-                  if (empleado) {
-                        empleado.img = nombreImagen;
-                        await empleado.save();
-                        const response = {
-                        msg:"Actualizacion realizada"
-                        };
-                        res.status(200).json(response);
-                  } else {
-                    throw "Error al actualizar";
-                  }
-            }
-          });
-            
-      } catch (error) {
-           console.log(error) 
-           res.status(400).json({
-                 msg:"Error al actualizar los datos del empleados"
-           })
+
+      if(req.body.imagen){
+          try {
+            //const buff = new Buffer.from(req.body.imagen , 'base64');
+           // await fs.writeFileSync('./files/img_'+ new Date().getTime()+'.jpg', buff);
+           
+            console.log(req.body.imagen)
+            let data = req.body.imagen.replace(/^data:image\/\w+;base64,/, '');
+            let nombreImagen= 'img_'+ new Date().getTime()+ ".png";
+            fs.writeFile(process.env.DIR_IMAGE_FILES + nombreImagen, data, {encoding: 'base64'}, async function(err){
+                if(err){
+                   console.log(err)
+                }
+                else{
+                      console.log("imagen guardada correctamente")
+                      const empleado = await Empleado.findById(id).exec();
+                      if (empleado) {
+                            empleado.img = nombreImagen;
+                            await empleado.save();
+                            const response = {
+                            msg:"Actualizacion realizada"
+                            };
+                            res.status(200).json(response);
+                      } else {
+                        throw "Error al actualizar";
+                      }
+                }
+              });
+                
+          } catch (error) {
+               console.log(error) 
+               res.status(400).json({
+                     msg:"Error al actualizar los datos del empleados"
+               })
+          }          
       }
-       await Empleado.findByIdAndUpdate(id,rest, {new: true})  
+
+       const empleado = await Empleado.findByIdAndUpdate(id,rest, {new: true})  
   
+       res.json({
+        msg: "Empleado actualizado",
+        empleado
+    })
   }
     
 const inactivarEmpleado = async (req= request, res= response)=>{

@@ -4,9 +4,9 @@ const Licencia=require('../models/licencia')
 const moment = require('moment')
 
 const licenciasGet = async (req=request,  res=response)=> {
-    let {limite=10, desde=0, vencimiento} = req.query
+    let {limite=5, desde=0, vencimiento} = req.query
     let licencias, Total
-
+    
     limite = Number(limite)
     desde = Number(desde)
 
@@ -17,13 +17,17 @@ const licenciasGet = async (req=request,  res=response)=> {
     desde = 0;
     }
 
-    if(!vencimiento){
+
+    if(vencimiento === "undefined"){
          licencias = await Licencia.find({estado:true}).limit(limite).skip(desde)
         .populate("empleado", "nombre apellido dni")
         
          total = await Licencia.countDocuments({estado:true})
         
     }else{
+        // CAMBIAR ACTIVA:TRUE PARA MOSTRAR LAS LICENCIAS ACTIVAS VENCIDAS
+        // POR AHORA ESTA EN FALSE PARA PROBAR
+        vencimiento = moment(Number(vencimiento))
         const licenciasCompletas = await Licencia.find({estado:true, activa:false}).populate("empleado", "nombre apellido dni")
 
          licencias = licenciasCompletas.filter((licencia)=>{

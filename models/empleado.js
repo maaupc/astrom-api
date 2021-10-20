@@ -75,7 +75,7 @@ const EmpleadoSchema= new Schema({
 })
 //Para no mostrar password  ni __ v
 EmpleadoSchema.methods.toJSON=function(){
-    const {password, __v, _id, nacimiento, ...empleado}=this.toObject();
+    const { __v, _id, nacimiento, ...empleado}=this.toObject();
     empleado.uid= _id
     empleado.nacimiento = moment(nacimiento).format('YYYY-MM-DD')
     return empleado;

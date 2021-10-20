@@ -4,10 +4,19 @@ const Puesto=require("../models/puesto")
 //asi me creo cada funcion oara mla peticion
 const puestosGet=async(req=request,res=response)=>{
    //accediendo a buscar informacion y me traiga los puestod activos 
-      let{ limite=8, desde=0 }=req.query;
+      let{ limite=5, desde=0 }=req.query;
 
       limite=Number(limite)
       desde=Number(desde) 
+
+      if (isNaN(limite)) {
+            limite = 5;
+      }
+
+      if (isNaN(desde)) {
+            desde = 0;
+      }
+
 
       const puestos= await  Puesto.find({estado:true}).limit(limite).skip(desde)
       const total= await Puesto.countDocuments({estado:true})
