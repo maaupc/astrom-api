@@ -29,6 +29,7 @@ const EmpleadoSchema= new Schema({
     },
     emergencia:{
         type: String,
+        unique:true,
     },
     domicilio:{
         type: String,

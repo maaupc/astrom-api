@@ -47,7 +47,7 @@ const obtenerEmpleado = async (req= request, res= response)=>{
 }
 
 const crearEmpleado = async (req= request, res= response)=>{
-    const {dni , nombre, apellido, email, password, puesto, rol} = req.body
+    const {dni , nombre, apellido, email, password, puesto, rol,telefono,emergencia,domicilio,localidad,provincia,nacimiento} = req.body
     const empleado = new Empleado({dni , nombre, apellido, email, telefono, emergencia,
         domicilio, localidad, provincia, nacimiento, password, puesto, rol})
 
@@ -67,7 +67,7 @@ const crearEmpleado = async (req= request, res= response)=>{
 const editarEmpleado = async (req= request, res= response)=>{
       const { id } = req.params
 
-      const {_id, rol, password,img ,...rest} = req.body
+      const {_id, rol, password,...rest} = req.body
      console.log(req.body)
       if(password){
           const salt = bcrypt.genSaltSync(10)

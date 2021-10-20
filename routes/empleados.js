@@ -28,8 +28,8 @@ router.get('/:id',[
 
 //Peticion para crear nuevo empleado - ADMIN
 router.post('/', [
-    validarJWT,
-    esAdmin,
+   // validarJWT,
+   // esAdmin,
     check("nombre", "El nombre es obligatorio").not().isEmpty(),
     check("password", "La contraseña es obligatoria").not().isEmpty().trim(),
     check("password", "Debe tener 5 caracteres minimo").isLength({min:6}),
