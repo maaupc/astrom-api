@@ -66,7 +66,7 @@ const crearEmpleado = async (req= request, res= response)=>{
 const editarEmpleado = async (req= request, res= response)=>{
       const { id } = req.params
 
-      const {_id, rol, password,...rest} = req.body
+      const {_id, password,...rest} = req.body
       if(password){
           const salt = bcrypt.genSaltSync(10)
           rest.password = bcrypt.hashSync(password, salt)
@@ -74,7 +74,6 @@ const editarEmpleado = async (req= request, res= response)=>{
 
       if(req.body.imagen){
           try {           
-            console.log("req",req.body.imagen)
             let data = req.body.imagen.replace(/^data:image\/\w+;base64,/, '');
             let nombreImagen= 'img_'+ id + ".png";
             fs.writeFile(process.env.DIR_IMAGE_FILES + nombreImagen, data, {encoding: 'base64'}, async function(err){
