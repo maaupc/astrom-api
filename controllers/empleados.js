@@ -34,9 +34,12 @@ const obtenerEmpleados = async (req= request, res= response)=>{
 
 const obtenerEmpleado = async (req= request, res= response)=>{
     const {id} = req.params
-
+    
     const empleado = await Empleado.findById(id)
-     empleado.img=process.env.URL_BACK + "images/" + empleado.img ;
+    empleado.img=process.env.URL_BACK + "images/" + empleado.img ;
+    console.log(empleado.img)
+
+
     res.json({
         empleado
     })
@@ -70,12 +73,10 @@ const editarEmpleado = async (req= request, res= response)=>{
       }
 
       if(req.body.imagen){
-          try {
-            //const buff = new Buffer.from(req.body.imagen , 'base64');
-           // await fs.writeFileSync('./files/img_'+ new Date().getTime()+'.jpg', buff);
-           
+          try {           
+            console.log("req",req.body.imagen)
             let data = req.body.imagen.replace(/^data:image\/\w+;base64,/, '');
-            let nombreImagen= 'img_'+ new Date().getTime()+ ".png";
+            let nombreImagen= 'img_'+ id + ".png";
             fs.writeFile(process.env.DIR_IMAGE_FILES + nombreImagen, data, {encoding: 'base64'}, async function(err){
                 if(err){
                 }

@@ -62,6 +62,7 @@ const EmpleadoSchema= new Schema({
     },
     img:{
         type: String,
+        default: "default.png",
     },
     licencia:{
         type: Boolean,

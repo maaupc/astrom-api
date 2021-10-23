@@ -18,7 +18,8 @@ const licenciasGet = async (req=request,  res=response)=> {
     }
 
 
-    if(vencimiento === "undefined"){
+    
+    if(!vencimiento || vencimiento === "undefined"){
          licencias = await Licencia.find({estado:true}).limit(limite).skip(desde)
         .populate("empleado", "nombre apellido dni")
         
@@ -28,7 +29,7 @@ const licenciasGet = async (req=request,  res=response)=> {
         // CAMBIAR ACTIVA:TRUE PARA MOSTRAR LAS LICENCIAS ACTIVAS VENCIDAS
         // POR AHORA ESTA EN FALSE PARA PROBAR
         vencimiento = moment(Number(vencimiento))
-        const licenciasCompletas = await Licencia.find({estado:true, activa:false}).populate("empleado", "nombre apellido dni")
+        const licenciasCompletas = await Licencia.find({estado:true, activa:true}).populate("empleado", "nombre apellido dni")
 
          licencias = licenciasCompletas.filter((licencia)=>{
             return moment(licencia.fin).isSameOrBefore(vencimiento)
